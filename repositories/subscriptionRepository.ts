@@ -2,8 +2,15 @@ import Subscription, {ISubscription} from '../models/SubscriptionModel';
 import {LeanDocument} from "mongoose";
 
 export const create = async (subscription: ISubscription): Promise<LeanDocument<ISubscription>> => {
-  const newSubscription = new Subscription(subscription);
-  const savedSubscription = await newSubscription.save();
+  console.log("create");
+  let newSubscription : ISubscription;
+  let savedSubscription : ISubscription;
+  try {
+    newSubscription = new Subscription(subscription);
+    savedSubscription = await newSubscription.save();      
+  } catch (error) {
+    console.log(error);
+  }
   return savedSubscription.toObject();
 };
 

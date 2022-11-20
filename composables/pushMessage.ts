@@ -49,6 +49,7 @@ export function pushMsgButton() {
     const subscribe : () => void = async () => {
         if (!('serviceWorker' in navigator)) return;
 
+        console.log("Registering service worker...");
         const registration = await navigator.serviceWorker.ready;
       
         // Subscribe to push notifications
