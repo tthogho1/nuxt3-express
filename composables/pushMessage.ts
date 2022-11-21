@@ -23,6 +23,7 @@ const getUnsubscribedElement = () => document.getElementById('unsubscribed');
 const setSubscribeMessage : () => void = async () =>  {
     const registration = await navigator.serviceWorker.ready;
     const subscription = await registration.pushManager.getSubscription();
+  alert(subscription);
     getSubscribedElement().setAttribute('style', `display: ${subscription ? 'block' : 'none'};`);
     getUnsubscribedElement().setAttribute('style', `display: ${subscription ? 'none' : 'block'};`);
 };
@@ -34,6 +35,8 @@ export function pushMsgButton() {
             scope: '/',
           });
         } 
+
+        setSubscribeMessage();
       }
 
     const broadcast : () => void = async () => {
@@ -64,6 +67,10 @@ export function pushMsgButton() {
           headers: {
             'content-type': 'application/json',
           },
+        });
+
+        Notification.requestPermission(permission => {
+            console.log(permission);
         });
       
         if (response.ok) {
