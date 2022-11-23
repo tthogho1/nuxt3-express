@@ -1,13 +1,17 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ISubscription extends Document {
-  endpoint: string;
-  expirationTime?: number;
-  keys: {
-    auth: string;
-    p256dh: string;
+  name:string,
+  subscription: {
+    endpoint: string;
+    expirationTime?: number;
+    keys: {
+      auth: string;
+      p256dh: string;
+    }
   }
 }
+
 
 const SubscriptionModel = new Schema({
   endpoint: { type: String, unique: true, required: true },
@@ -18,4 +22,9 @@ const SubscriptionModel = new Schema({
   },
 });
 
-export default mongoose.model<ISubscription>('Subscription', SubscriptionModel);
+const  UserSubscriptionModel = new Schema({
+  name : {type: String, required: true},
+  subscription:SubscriptionModel,
+});
+
+export default mongoose.model<ISubscription>('Subscription', UserSubscriptionModel);

@@ -49,7 +49,7 @@ export function pushMsgButton() {
         //alert("broadcast");
     };
 
-    const subscribe : () => void = async () => {
+    const subscribe : (name:String) => void = async (name) => {
         if (!('serviceWorker' in navigator)) return;
 
         console.log("Registering service worker...");
@@ -60,10 +60,15 @@ export function pushMsgButton() {
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
         });
-      
+        
+        const data = {
+          name:name,
+          subscription: subscription,
+        }
+
         const response = await fetch('/api/subscription', {
           method: 'POST',
-          body: JSON.stringify(subscription),
+          body: JSON.stringify(data),
           headers: {
             'content-type': 'application/json',
           },
