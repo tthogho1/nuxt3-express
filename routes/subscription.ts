@@ -55,7 +55,8 @@ export const broadcast = async (
 
     const notifications: Promise<SendResult>[] = [];
     subscriptions.forEach((subscription) => {
-      notifications.push(webpush.sendNotification(subscription, JSON.stringify(notification)));
+      let tsub = subscription.subscription;
+      notifications.push(webpush.sendNotification(tsub, JSON.stringify(notification)));
     });
 
     await Promise.all(notifications);

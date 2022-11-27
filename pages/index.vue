@@ -37,7 +37,10 @@
   }
 </style>
 <script setup lang="ts">
-const authId = 'test';
+import { userInformation } from '../composables/userInformation'
+const {user,setUser,getUser} = userInformation();
+
+let authId = 'test';
 
 const login = async ()=>{
     console.log("login");
@@ -51,6 +54,10 @@ const login = async ()=>{
                 authId: authId
             })
         });
+        const data = await res.json();
+        setUser(data.authId);
+        //location.href = '/menu';
+        await navigateTo('/menu');
     } catch (error) {   
         console.log(error);
         alert("ログインに失敗しました");

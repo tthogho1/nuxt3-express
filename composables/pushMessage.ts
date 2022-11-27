@@ -1,6 +1,5 @@
 
-
-  const publicVapidKey = 'BMrfFtMtL9IWl9vchDbbbYzJlbQwplyZ_fbv8Pei8gPNna_Dr1O-Ng7U7fy0LLqz5RKIxEytTIzyk6TLrcKbN30';
+const publicVapidKey = 'BMrfFtMtL9IWl9vchDbbbYzJlbQwplyZ_fbv8Pei8gPNna_Dr1O-Ng7U7fy0LLqz5RKIxEytTIzyk6TLrcKbN30';
   
   const urlBase64ToUint8Array = (base64String : string) => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -17,24 +16,29 @@
     return outputArray;
   };
   
-const getSubscribedElement = () => document.getElementById('subscribed');
-const getUnsubscribedElement = () => document.getElementById('unsubscribed');
-  
+//const getSubscribedElement = () => document.getElementById('subscribed');
+//const getUnsubscribedElement = () => document.getElementById('unsubscribed');
+var getSubscribedElement ;
+var getUnsubscribedElement ;
+
+
 const setSubscribeMessage : () => void = async () =>  {
     const registration = await navigator.serviceWorker.ready;
     const subscription = await registration.pushManager.getSubscription();
-  alert(subscription);
-    getSubscribedElement().setAttribute('style', `display: ${subscription ? 'block' : 'none'};`);
-    getUnsubscribedElement().setAttribute('style', `display: ${subscription ? 'none' : 'block'};`);
+    getSubscribedElement.setAttribute('style', `display: ${subscription ? 'block' : 'none'};`);
+    getUnsubscribedElement.setAttribute('style', `display: ${subscription ? 'none' : 'block'};`);
 };
 
 export function pushMsgButton() {
-    const init = () => {
+    const init = (sub,unsub) => {
         if ('serviceWorker' in navigator) {
            navigator.serviceWorker.register('/sw.js', {
             scope: '/',
           });
         } 
+      //  alert(sub);
+        getSubscribedElement = sub;
+        getUnsubscribedElement = unsub;
 
         setSubscribeMessage();
       }
@@ -52,12 +56,14 @@ export function pushMsgButton() {
     const subscribe : (name:String) => void = async (name) => {
         if (!('serviceWorker' in navigator)) return;
 
-        console.log("Registering service worker...");
+       // const user = getUser();
+       // alert(user);
+        console.log("Registering service worker..." + name);
         const registration = await navigator.serviceWorker.ready;
       
         // Subscribe to push notifications
         const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
+          userVisibleOnly: true, 
           applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
         });
         
@@ -80,6 +86,9 @@ export function pushMsgButton() {
       
         if (response.ok) {
           setSubscribeMessage();
+          alert("subscribe data");
+        }else{
+          alert("subscribe data error");
         }
     };
 
@@ -99,6 +108,9 @@ export function pushMsgButton() {
       if (response.ok) {
         await subscription.unsubscribe();
         setSubscribeMessage();
+        alert("unsubscribe data");
+      }else{
+        alert("unsubscribe data failed");
       }
     };
 
