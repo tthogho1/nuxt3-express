@@ -43,13 +43,15 @@ export const remove = async (
 };
 
 export const broadcast = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
     console.log("BROADCAST");
-    const notification = { title: 'Hey, this is a push notification!' };
+
+    const  message = req.body.message ? req.body.message : "Hey, this is a push notification!";
+    const notification = { title: message };
 
     const subscriptions = await subscriptionRepository.getAll();
 
@@ -59,6 +61,31 @@ export const broadcast = async (
       notifications.push(webpush.sendNotification(tsub, JSON.stringify(notification)));
     });
 
+    await Promise.all(notifications);
+    res.sendStatus(200);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
+export const sendmessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    console.log("sendmessasge");
+
+    const name = req.body.name;
+    const notification = { title: '$CALL$' ,body: 'You have a call from ' + name};
+    const subscription = await subscriptionRepository.getByName(name);
+
+    const notifications: Promise<SendResult>[] = [];
+     
+    let tsub = subscription.subscription;
+    notifications.push(webpush.sendNotification(tsub, JSON.stringify(notification)));
+    
     await Promise.all(notifications);
     res.sendStatus(200);
   } catch (e) {

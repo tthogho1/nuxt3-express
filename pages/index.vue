@@ -40,9 +40,9 @@
 import { userInformation } from '../composables/userInformation'
 const {user,setUser,getUser} = userInformation();
 
-let authId = 'test';
+let authId = '';
 
-const login = async ()=>{
+const login = async () => {
     console.log("login");
     try {
         const res = await fetch('/api/login', {

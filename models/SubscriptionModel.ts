@@ -14,7 +14,7 @@ export interface ISubscription extends Document {
 
 
 const SubscriptionModel = new Schema({
-  endpoint: { type: String, unique: true, required: true },
+  endpoint: { type: String,  required: true },
   expirationTime: { type: Number, required: false },
   keys: {
     auth: String,
@@ -23,7 +23,7 @@ const SubscriptionModel = new Schema({
 });
 
 const  UserSubscriptionModel = new Schema({
-  name : {type: String, required: true},
+  name : {type: String, unique: true,required: true},
   subscription:SubscriptionModel,
 });
 

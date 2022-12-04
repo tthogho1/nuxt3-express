@@ -6,13 +6,13 @@ import type { Ref } from 'vue';
 export const userInformation = () => {
     const user  = useState<{authId:String}>('user',()=> {
         console.log("userInformation");
-        return {authId:"a"};
+        return {authId:""};
     });
     const setUser = (user:Ref<{authId:String}>) => (name:String) => {
         ///     let user = useState("login-user",() => name);
         console.log("set user info..." + name);
         user.value.authId = name;
-        alert(user.value.authId);
+       // alert(user.value.authId);
     }
     
     const getUser = (user:Ref<{authId:String}>) =>()=> {

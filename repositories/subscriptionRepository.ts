@@ -22,3 +22,11 @@ export const deleteByEndpoint = async (endpoint: string): Promise<boolean> => {
 export const getAll = async (): Promise<ISubscription[]> => {
   return Subscription.find();
 };
+
+export const getByName = async (name: string): Promise<ISubscription> => {
+  return Subscription.findOne({ name :name });
+}
+
+export const getUsers = async (): Promise<{name:string}[]> => {
+  return Subscription.find().sort({name:'asc'}).select("name");
+}

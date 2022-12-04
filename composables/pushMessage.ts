@@ -21,7 +21,6 @@ const publicVapidKey = 'BMrfFtMtL9IWl9vchDbbbYzJlbQwplyZ_fbv8Pei8gPNna_Dr1O-Ng7U
 var getSubscribedElement ;
 var getUnsubscribedElement ;
 
-
 const setSubscribeMessage : () => void = async () =>  {
     const registration = await navigator.serviceWorker.ready;
     const subscription = await registration.pushManager.getSubscription();
@@ -43,14 +42,24 @@ export function pushMsgButton() {
         setSubscribeMessage();
       }
 
-    const broadcast : () => void = async () => {
+    const broadcast : (message:String) => void = async (message) => {
+      const data = {
+        message:message,
+      }
+      try{
         await fetch('/api/broadcast', {
-            method: 'GET',
-            headers: {
-              'content-type': 'application/json',
-            },
-          });
-        //alert("broadcast");
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        alert("broadcast message");
+      }catch(e){
+        alert("broadcast error");
+        console.log(e);
+      }
+      //alert("broadcast");
     };
 
     const subscribe : (name:String) => void = async (name) => {
@@ -114,10 +123,33 @@ export function pushMsgButton() {
       }
     };
 
+    const sendmessage : (event) => void = async (event) => {
+      console.log(event);
+
+      const name = event.target.text;
+      let result = window.confirm("send message to " + name + " ?");
+      if(!result){
+        return;
+      }
+
+      const data = {
+        name:name,
+      }
+      await fetch('/api/sendmessage', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+      //alert("broadcast");
+    };
+
     return {
       init,
       broadcast,
       subscribe,
       unsubscribe,
+      sendmessage,
     };
   }
