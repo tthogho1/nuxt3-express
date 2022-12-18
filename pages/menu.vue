@@ -1,23 +1,31 @@
 <script setup lang="ts">
 import { pushMsgButton } from "~~/composables/pushMessage";
 import { userInformation } from '../composables/userInformation'
+import { setlocalStream ,  skyWayInformation} from '../composables/skyway'
 
+const {openPeerId , getPeerId} = skyWayInformation();
 const {user,setUser,getUser} = userInformation();
 const { init,broadcast, subscribe , unsubscribe , sendmessage } = pushMsgButton();
 // const {data: articles, refresh} = await useFetch('/api/blogs');
+let localstream : MediaStream ;
 
 onMounted(() => {
- // window:onload = () => {
- //   alert('test2');
-    const tuser = getUser();
+
+  const tuser = getUser();
     if (!tuser.user.authId){
       window.location.href = '/';
     }
+
     let sub =document.getElementById('subscribed');
     let unsub =document.getElementById('unsubscribed');  
     init(sub,unsub);
     getUsers();
-//  };   
+
+    let video = document.getElementById('my-video') as HTMLVideoElement;
+    setlocalStream(localstream,video);
+    // let peerId = document.getElementById('my-peerId') as HTMLElement;
+    openPeerId();
+    //alert(my_peerId);  
 });
 
 const wrapSubscribe = async() => {
@@ -27,10 +35,18 @@ const wrapSubscribe = async() => {
 };
 
 const wrapBroadcast = () => {
-  const message = document.getElementById('broadMessage').value;
+  const message = (document.getElementById('broadMessage') as HTMLInputElement).value;
   broadcast(message);
 };
 
+const wrapSendmessage = (event) => {
+  const tuser = getUser();
+  const fromUser = tuser.user.authId;
+  const peerId = getPeerId();
+  console.log("send peerId : " + peerId);
+
+  sendmessage(event,fromUser,peerId);
+};
 
 definePageMeta({
   pageTransition: false,
@@ -66,20 +82,21 @@ const sendmessage = async(event) => {
   <h1>Push notification center</h1>
   <h3 id="subscribed">You are subscribed</h3>
   <h3 id="unsubscribed">You are not subscribed</h3>
+  <p id="my-peerId"></p>
   <div class="row">
     <input class="col-12" id="broadMessage" value="">
   </div>
   <div class="row">
-    <button @click="wrapBroadcast()">Send push notification</button>
-    <button @click="wrapSubscribe()">Subscribe</button>
-    <button @click="unsubscribe()">Unsubscribe</button>
-  </div>
-
-  <div v-for="userdata in usersData" :key="userdata._id">
-    <div><a href="#" @click="sendmessage">{{userdata.name}}</a></div>
-  </div>
-  <div>
-    <video id="my-video" width="400px" autoplay muted playsinline></video>
+    <button class="col-4" @click="wrapBroadcast()">Send push notification</button>
+    <button class="col-4" @click="wrapSubscribe()">Subscribe</button>
+    <button class="col-4" @click="unsubscribe()">Unsubscribe</button>
   </div>
 </div>
+
+  <div v-for="userdata in usersData" :key="userdata._id">
+    <div><a href="#" @click="wrapSendmessage">{{userdata.name}}</a></div>
+  </div>
+  <div>
+    <video width="320" height="240" id="my-video" autoplay muted playsinline></video>
+  </div>
 </template>

@@ -1,7 +1,7 @@
 
 const publicVapidKey = 'BMrfFtMtL9IWl9vchDbbbYzJlbQwplyZ_fbv8Pei8gPNna_Dr1O-Ng7U7fy0LLqz5RKIxEytTIzyk6TLrcKbN30';
   
-  const urlBase64ToUint8Array = (base64String : string) => {
+const urlBase64ToUint8Array = (base64String : string) => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
       .replace(/\-/g, '+')
@@ -123,7 +123,8 @@ export function pushMsgButton() {
       }
     };
 
-    const sendmessage : (event) => void = async (event) => {
+    const sendmessage : (event,fromUser:string,peerId:string) => void 
+      = async (event,fromUser:string,peerId:string) => {
       console.log(event);
 
       const name = event.target.text;
@@ -133,7 +134,9 @@ export function pushMsgButton() {
       }
 
       const data = {
-        name:name,
+        target:name,
+        fromUser:fromUser,
+        peerId:peerId,
       }
       await fetch('/api/sendmessage', {
           method: 'POST',

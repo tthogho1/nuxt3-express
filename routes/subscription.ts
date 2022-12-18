@@ -77,9 +77,14 @@ export const sendmessage = async (
   try {
     console.log("sendmessasge");
 
-    const name = req.body.name;
-    const notification = { title: '$CALL$' ,body: 'You have a call from ' + name};
-    const subscription = await subscriptionRepository.getByName(name);
+    const target = req.body.target;
+    const name = req.body.fromUser;
+    const sendPeerId= req.body.peerId;
+    const notification = { title: 'CALL' ,
+                            body: 'You have a call from ' + name + ' !',
+                            peerId: sendPeerId};
+
+    const subscription = await subscriptionRepository.getByName(target);
 
     const notifications: Promise<SendResult>[] = [];
      

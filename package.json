@@ -17,6 +17,7 @@
     "mongoose": "^6.7.2",
     "skyway-js": "^4.4.5",
     "ts-node": "^10.9.1",
-    "web-push": "^3.5.0"
+    "web-push": "^3.5.0",
+    "xmlhttprequest": "^1.8.0"
   }
 }

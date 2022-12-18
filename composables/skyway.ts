@@ -1,5 +1,46 @@
 import Peer from 'skyway-js';
-const peer = new Peer({key: '2bda16ac-ebdf-4007-bcb4-28be1fa0a379'});
+import type { Ref } from 'vue';
+
+export const skyWayInformation = () => {
+    const peer = new Peer({
+        key: '2bda16ac-ebdf-4007-bcb4-28be1fa0a379',
+        debug:3});
+
+    const my_peerId  = useState<{peerId:string}>('peerId',()=> {
+        return {peerId:""};
+    });
+
+    const openPeerId = () => ()=> {
+        peer.on('open', () => {
+            console.log("open peerId : " +  peer.id);
+            my_peerId.value.peerId = peer.id;
+        });
+    } ;
+
+    const getPeerId = (my_peerId:Ref<{peerId:string}>)=> () => {
+        console.log("open peerId : " +  my_peerId.value.peerId);
+
+        return my_peerId.value.peerId;
+    } ;
+    
+
+    const callPeerId = () => 
+        (theirID:string,localStream:MediaStream) =>{
+
+        console.log("call peerId : " +  theirID);
+        const mediaConnection = peer.call(theirID, localStream);
+
+        return mediaConnection;
+    };
+
+    return {
+        openPeerId: openPeerId(),
+        getPeerId: getPeerId(my_peerId),
+        callPeerId: callPeerId(),
+    }
+}
+
+
 /*
 const call = async (peerId) => {
     const mediaConnection = peer.call(peerId, window.localStream);
@@ -23,19 +64,20 @@ const answer = async () => {
     });
 }*/
 
-export const setlocalStream = async (localStream:MediaStream,videoElement:HTMLVideoElement) => {
+export const setlocalStream = async (localstream:MediaStream,videoElement:HTMLVideoElement) => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
         const video = videoElement ;
         video.srcObject = stream;
         video.play();
-        localStream = stream;        
+
+        //return stream;
     } catch (error) {
-        console.error('mediaDevice.getUserMedia() error:', error);
+        console.error("mediaDevice.getUserMedia error:", error);
         return;
     }
 }
 
 export const getPeer = () => {
-  return peer;
+ // return peer;
 }
