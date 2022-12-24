@@ -3,9 +3,9 @@ import { setlocalStream ,  skyWayInformation} from '../../composables/skyway'
 
 const route = useRoute();
 const { id } = route.params;
-console.log(id + 'を取得しました');
+console.log( id + 'を取得しました');
 
-const {openPeerId , getPeerId,callPeerId} = skyWayInformation();
+const { callPeerId } = skyWayInformation();
 let localstream : MediaStream ;
 
 // イベントリスナを設置する関数
@@ -23,10 +23,10 @@ onMounted(() => {
     let video = document.getElementById('call-video') as HTMLVideoElement;
     setlocalStream(localstream,video);
     // let peerId = document.getElementById('my-peerId') as HTMLElement;
-    openPeerId();
-    //alert(my_peerId);
-    let peerId = getPeerId();
-    let mediaConnection = callPeerId(peerId,localstream);
+    //  openPeerId();
+    console.log("call peerId to " + id);
+    let to_id = id as string;
+    let mediaConnection = callPeerId( to_id , localstream);
 
     setEventListener(mediaConnection);
 });

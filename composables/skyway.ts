@@ -24,19 +24,34 @@ export const skyWayInformation = () => {
     } ;
     
 
-    const callPeerId = () => 
-        (theirID:string,localStream:MediaStream) =>{
+    const callPeerId = () => (theirID:string,localStream:MediaStream) =>{
 
-        console.log("call peerId : " +  theirID);
-        const mediaConnection = peer.call(theirID, localStream);
+        peer.on('open', () => {
+            console.log("open peerId for call : " +  peer.id);
+            my_peerId.value.peerId = peer.id;
+            console.log("call peerId : " +  theirID);
+            const mediaConnection = peer.call(theirID, localStream);
+            return mediaConnection;
+        });
+    };
 
-        return mediaConnection;
+
+    const answerPeerId = () =>(localStream:MediaStream,theirVideo:HTMLVideoElement) => {
+        peer.on('call', mediaConnection => {
+            mediaConnection.answer(localStream);
+            mediaConnection.on('stream', stream => {
+                // Show stream in some <video> element.
+                theirVideo.srcObject = stream;
+                theirVideo.play();
+            });
+        });
     };
 
     return {
         openPeerId: openPeerId(),
         getPeerId: getPeerId(my_peerId),
         callPeerId: callPeerId(),
+        answerPeerId: answerPeerId(),
     }
 }
 

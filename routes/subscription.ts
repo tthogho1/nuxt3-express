@@ -80,7 +80,7 @@ export const sendmessage = async (
     const target = req.body.target;
     const name = req.body.fromUser;
     const sendPeerId= req.body.peerId;
-    const notification = { title: 'CALL' ,
+    const notification = { title: '$CALL$' ,
                             body: 'You have a call from ' + name + ' !',
                             peerId: sendPeerId};
 

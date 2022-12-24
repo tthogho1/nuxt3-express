@@ -3,7 +3,7 @@ import { pushMsgButton } from "~~/composables/pushMessage";
 import { userInformation } from '../composables/userInformation'
 import { setlocalStream ,  skyWayInformation} from '../composables/skyway'
 
-const {openPeerId , getPeerId} = skyWayInformation();
+const {openPeerId , getPeerId, answerPeerId} = skyWayInformation();
 const {user,setUser,getUser} = userInformation();
 const { init,broadcast, subscribe , unsubscribe , sendmessage } = pushMsgButton();
 // const {data: articles, refresh} = await useFetch('/api/blogs');
@@ -25,6 +25,8 @@ onMounted(() => {
     setlocalStream(localstream,video);
     // let peerId = document.getElementById('my-peerId') as HTMLElement;
     openPeerId();
+    let theirvideo = document.getElementById('their-video') as HTMLVideoElement;
+    answerPeerId(localstream,theirvideo);
     //alert(my_peerId);  
 });
 
@@ -98,5 +100,6 @@ const sendmessage = async(event) => {
   </div>
   <div>
     <video width="320" height="240" id="my-video" autoplay muted playsinline></video>
+    <video width="320" height="240" id="their-video" autoplay muted playsinline></video>
   </div>
 </template>
