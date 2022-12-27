@@ -148,11 +148,35 @@ export function pushMsgButton() {
       //alert("broadcast");
     };
 
+    const sendTest : (fromUser:string,target:string,peerId:string) => void 
+    = async (fromUser:string,target:string,peerId:string) => {
+
+    let result = window.confirm("send message to " +  target + " ?");
+    if(!result){
+      return;
+    }
+
+    const data = {
+      target:target,
+      fromUser:fromUser,
+      peerId:peerId,
+    }
+    await fetch('/api/sendmessage', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+    //alert("broadcast");
+  };
+
     return {
       init,
       broadcast,
       subscribe,
       unsubscribe,
       sendmessage,
+      sendTest,
     };
   }

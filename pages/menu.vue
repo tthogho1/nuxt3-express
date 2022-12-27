@@ -5,7 +5,7 @@ import { setlocalStream ,  skyWayInformation} from '../composables/skyway'
 
 const {openPeerId , getPeerId, answerPeerId} = skyWayInformation();
 const {user,setUser,getUser} = userInformation();
-const { init,broadcast, subscribe , unsubscribe , sendmessage } = pushMsgButton();
+const { init, broadcast, subscribe , unsubscribe , sendmessage } = pushMsgButton();
 // const {data: articles, refresh} = await useFetch('/api/blogs');
 let localstream : MediaStream ;
 
@@ -21,13 +21,14 @@ onMounted(() => {
     init(sub,unsub);
     getUsers();
 
-    let video = document.getElementById('my-video') as HTMLVideoElement;
+   /* let video = document.getElementById('my-video') as HTMLVideoElement;
     setlocalStream(localstream,video);
     // let peerId = document.getElementById('my-peerId') as HTMLElement;
     openPeerId();
     let theirvideo = document.getElementById('their-video') as HTMLVideoElement;
-    answerPeerId(localstream,theirvideo);
-    //alert(my_peerId);  
+    answerPeerId(localstream,theirvideo); */
+    //alert(my_peerId);
+
 });
 
 const wrapSubscribe = async() => {
@@ -44,10 +45,12 @@ const wrapBroadcast = () => {
 const wrapSendmessage = (event) => {
   const tuser = getUser();
   const fromUser = tuser.user.authId;
-  const peerId = getPeerId();
-  console.log("send peerId : " + peerId);
+//  const peerId = getPeerId();
+ // console.log("send peerId : " + peerId);
+  const target = event.target.text;
+  window.open("http://localhost:8080/skyway?from=" + fromUser + "&target=" + target,"_blank");
 
-  sendmessage(event,fromUser,peerId);
+  //sendmessage(event,fromUser,peerId);
 };
 
 definePageMeta({
@@ -98,8 +101,8 @@ const sendmessage = async(event) => {
   <div v-for="userdata in usersData" :key="userdata._id">
     <div><a href="#" @click="wrapSendmessage">{{userdata.name}}</a></div>
   </div>
-  <div>
+  <!--div>
     <video width="320" height="240" id="my-video" autoplay muted playsinline></video>
     <video width="320" height="240" id="their-video" autoplay muted playsinline></video>
-  </div>
+  </div -->
 </template>
