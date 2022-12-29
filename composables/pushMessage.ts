@@ -1,3 +1,4 @@
+import { stringifyStyle } from "@vue/shared";
 
 const publicVapidKey = 'BMrfFtMtL9IWl9vchDbbbYzJlbQwplyZ_fbv8Pei8gPNna_Dr1O-Ng7U7fy0LLqz5RKIxEytTIzyk6TLrcKbN30';
   
@@ -61,6 +62,52 @@ export function pushMsgButton() {
       }
       //alert("broadcast");
     };
+
+    const subscribeAsync :  (name:String) => Promise<string>  = async (name) {
+      if (!('serviceWorker' in navigator)) {
+        return Promise.reject("error")
+      };
+
+     // const user = getUser();
+     // alert(user);
+      console.log("Registering service worker..." + name);
+      const registration = await navigator.serviceWorker.ready;
+    
+      // Subscribe to push notifications
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true, 
+        applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
+      });
+      
+      const data = {
+        name:name,
+        subscription: subscription,
+      }
+
+      Notification.requestPermission(permission => {
+        console.log(permission);
+      });
+      //const response = await 
+      fetch('/api/subscription', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json',
+        },
+      }).then((response)=>{
+        if (response.ok) {
+          setSubscribeMessage();
+          return Promise.resolve("ok");
+        }else{
+          return Promise.reject("error");
+        }
+        
+      }).catch(e => {
+        console.log(e); 
+        return Promise.reject("error");
+      });
+
+  };
 
     const subscribe : (name:String) => void = async (name) => {
         if (!('serviceWorker' in navigator)) return;
@@ -178,5 +225,6 @@ export function pushMsgButton() {
       unsubscribe,
       sendmessage,
       sendTest,
+      subscribeAsync,
     };
   }

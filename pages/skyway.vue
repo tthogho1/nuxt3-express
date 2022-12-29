@@ -173,10 +173,19 @@ const {  sendTest } = pushMsgButton();
 
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      const target = urlParams.get('target');
-      const fromUser = urlParams.get('fromUser');
+      const calltarget = urlParams.get('calltarget');
+      // alert("test : " + from + " " + target + " " + id);
 
-      sendTest(fromUser,target,id);
+      const from = urlParams.get('from');
+      if (from){
+        const target = urlParams.get('target');
+        sendTest(from,target,id);
+      }else{
+        if (calltarget){
+          remoteId.value = calltarget;
+          callTrigger.click();
+        }
+      }
     });
 
     // Register callee handler  receive call

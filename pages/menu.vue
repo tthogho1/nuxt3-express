@@ -44,11 +44,11 @@ const wrapBroadcast = () => {
 
 const wrapSendmessage = (event) => {
   const tuser = getUser();
-  const fromUser = tuser.user.authId;
+  const from = tuser.user.authId;
 //  const peerId = getPeerId();
  // console.log("send peerId : " + peerId);
   const target = event.target.text;
-  window.open("http://localhost:8080/skyway?from=" + fromUser + "&target=" + target,"_blank");
+  window.open("./skyway?from=" + from + "&target=" + target,"_blank");
 
   //sendmessage(event,fromUser,peerId);
 };

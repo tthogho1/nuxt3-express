@@ -1,5 +1,8 @@
 let peerId = null;
 
+//
+// push通知を受け取った時の処理
+//
 self.addEventListener('push', (e) => {
   const data = e.data.json();
   const title = data.title;
@@ -24,6 +27,9 @@ self.addEventListener('push', (e) => {
   }
 });
 
+//
+// ボタンを押した時の処理
+//
 self.addEventListener('notificationclick', (e) => {
   const data = e.notification.data;
   const action = e.action;
@@ -33,16 +39,12 @@ self.addEventListener('notificationclick', (e) => {
   if (action === 'accept') {
     console.log('accept');
     // do something
-    clients.openWindow('./call/' + peerId).then(
-      (windowClient) => windowClient ? windowClient.focus() : null);
-   // window.open('https://www.google.com', '_blank');
+    clients.openWindow('./skyway?calltarget=' + peerId).then(
+      (windowClient) => console.log("windowClient: " + windowClient));
+     // window.open("http://localhost:8080/" + ,"_blank");
   } else if (action === 'decline') {
     console.log('decline');
     // do something
   }
 });
 
-function calltoPeer(){
-
-
-}
