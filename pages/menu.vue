@@ -5,7 +5,7 @@ import { setlocalStream ,  skyWayInformation} from '../composables/skyway'
 
 const {openPeerId , getPeerId, answerPeerId} = skyWayInformation();
 const {user,setUser,getUser} = userInformation();
-const { init, broadcast, subscribe , unsubscribe , sendmessage } = pushMsgButton();
+const { init, broadcast, subscribe ,subscribeAsync, unsubscribe , sendmessage } = pushMsgButton();
 // const {data: articles, refresh} = await useFetch('/api/blogs');
 let localstream : MediaStream ;
 
@@ -33,8 +33,15 @@ onMounted(() => {
 
 const wrapSubscribe = async() => {
   const tuser = getUser();
-  subscribe(tuser.user.authId);
-  getUsers();
+  //subscribe(tuser.user.authId);
+  subscribeAsync(tuser.user.authId).then((res) => {
+    console.log(res);
+    getUsers();
+  }).catch((err) => {
+    console.log(err);
+    alert("登録に失敗しました");
+  });
+  
 };
 
 const wrapBroadcast = () => {

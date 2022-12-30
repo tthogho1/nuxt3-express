@@ -63,7 +63,7 @@ export function pushMsgButton() {
       //alert("broadcast");
     };
 
-    const subscribeAsync :  (name:String) => Promise<string>  = async (name) {
+    const subscribeAsync :  (name:String) => Promise<string> = async (name) =>{
       if (!('serviceWorker' in navigator)) {
         return Promise.reject("error")
       };
