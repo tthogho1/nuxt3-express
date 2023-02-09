@@ -12,7 +12,7 @@ let localstream : MediaStream ;
 onMounted(() => {
 
   const tuser = getUser();
-    if (!tuser.user.authId){
+    if (!tuser.user.name){
       window.location.href = '/';
     }
 
@@ -33,8 +33,7 @@ onMounted(() => {
 
 const wrapSubscribe = async() => {
   const tuser = getUser();
-  //subscribe(tuser.user.authId);
-  subscribeAsync(tuser.user.authId).then((res) => {
+  subscribeAsync(tuser.user.name).then((res) => {
     console.log(res);
     getUsers();
   }).catch((err) => {
@@ -51,13 +50,11 @@ const wrapBroadcast = () => {
 
 const wrapSendmessage = (event) => {
   const tuser = getUser();
-  const from = tuser.user.authId;
-//  const peerId = getPeerId();
- // console.log("send peerId : " + peerId);
+  const from = tuser.user.name;
+
   const target = event.target.text;
   window.open("./skyway?from=" + from + "&target=" + target,"_blank");
 
-  //sendmessage(event,fromUser,peerId);
 };
 
 definePageMeta({
@@ -103,11 +100,14 @@ const sendmessage = async(event) => {
     <button class="col-4" @click="wrapSubscribe()">Subscribe</button>
     <button class="col-4" @click="unsubscribe()">Unsubscribe</button>
   </div>
-</div>
 
   <div v-for="userdata in usersData" :key="userdata._id">
-    <div><a href="#" @click="wrapSendmessage">{{userdata.name}}</a></div>
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-11"><a href="#" @click="wrapSendmessage">{{userdata.name}}</a></div>
+    </div>
   </div>
+</div>
   <!--div>
     <video width="320" height="240" id="my-video" autoplay muted playsinline></video>
     <video width="320" height="240" id="their-video" autoplay muted playsinline></video>

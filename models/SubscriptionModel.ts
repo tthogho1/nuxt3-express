@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ISubscription extends Document {
   name:string,
+  password:string,
   subscription: {
     endpoint: string;
     expirationTime?: number;
@@ -24,6 +25,7 @@ const SubscriptionModel = new Schema({
 
 const  UserSubscriptionModel = new Schema({
   name : {type: String, unique: true,required: true},
+  password: {type: String, required: true},
   subscription:SubscriptionModel,
 });
 

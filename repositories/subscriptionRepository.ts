@@ -1,6 +1,21 @@
 import Subscription, {ISubscription} from '../models/SubscriptionModel';
 import {LeanDocument} from "mongoose";
 
+
+export const createUser = async (subscription: ISubscription): Promise<LeanDocument<ISubscription>> => {
+  console.log("create user in repository");
+  let newSubscription : ISubscription;
+  try {
+    newSubscription = await new Subscription(subscription).save();
+  } catch (error) {
+    console.log(error);
+    throw new Error(error);
+     error;
+  }
+  return newSubscription.toObject();
+};
+
+
 export const create = async (subscription: ISubscription): Promise<LeanDocument<ISubscription>> => {
   console.log("create");
   let newSubscription : ISubscription;
@@ -25,6 +40,16 @@ export const getAll = async (): Promise<ISubscription[]> => {
 
 export const getByName = async (name: string): Promise<ISubscription> => {
   return Subscription.findOne({ name :name });
+}
+
+export const getUserByNameAndPassword = async (name: string , password: string): Promise<ISubscription> => {
+  let user = await Subscription.findOne({ name :name , password:password}); 
+  if (!user) {
+    console.log("user not found : " + name + " " + password);
+    user = new Subscription({});
+  }
+  return user;
+
 }
 
 export const getUsers = async (): Promise<{name:string}[]> => {
