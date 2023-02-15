@@ -1,7 +1,7 @@
 import express from "express";
 import { defaultRoute } from "../routes/defaultRoute";
 import { post, remove, broadcast ,sendmessage} from '../routes/subscription';
-import { getUsers } from '../routes/dboperation';
+import { getUsers, getAllOtherUsers } from '../routes/dboperation';
 import { login } from '../routes/login';
 import { create } from '../routes/create';
 import database from '../config/database';
@@ -21,6 +21,7 @@ app.post('/broadcast', broadcast);
 app.post('/create', create);
 app.post('/login', login);
 app.post('/getUsers', getUsers);
+app.post('/getAllOtherUsers', getAllOtherUsers)
 app.post('/sendmessage', sendmessage);
 
 database();

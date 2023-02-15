@@ -2,19 +2,24 @@ import { NextFunction, Request, Response } from 'express';
 import * as subscriptionRepository from '../repositories/subscriptionRepository';
 import webpush, { SendResult } from 'web-push';
 
+
+
 export const post = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     console.log("POST");
     console.log(req.body);
     const subscription = req.body;
 
-    const newSubscription = await subscriptionRepository.create(subscription);
+//  const newSubscription = await subscriptionRepository.create(subscription);
+    const newSubscription = await subscriptionRepository.update(subscription);
     // Send 201 - resource created
     console.log(newSubscription);
     res.status(201).json(newSubscription);
   } catch (e) {
+
     console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
+    //next(e);
   }
 };
 
@@ -48,7 +53,7 @@ export const broadcast = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    console.log("BROADCAST");
+    console.log("BROADCAST MESSAGE");
 
     const  message = req.body.message ? req.body.message : "Hey, this is a push notification!";
     const notification = { title: message };

@@ -63,13 +63,11 @@ export function pushMsgButton() {
       //alert("broadcast");
     };
 
-    const subscribeAsync :  (name:String) => Promise<string> = async (name) =>{
+    const subscribeAsync : (name:string) => Promise<string> = async (name)=>{
       if (!('serviceWorker' in navigator)) {
-        return Promise.reject("error")
+        return "error";
       };
 
-     // const user = getUser();
-     // alert(user);
       console.log("Registering service worker..." + name);
       const registration = await navigator.serviceWorker.ready;
     
@@ -88,25 +86,26 @@ export function pushMsgButton() {
         console.log(permission);
       });
       //const response = await 
-      fetch('/api/subscription', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'content-type': 'application/json',
-        },
-      }).then((response)=>{
+      try {
+        const response = await fetch('/api/subscription', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+                'content-type': 'application/json',
+          },
+        });
         if (response.ok) {
           setSubscribeMessage();
-          return Promise.resolve("ok");
+          return "ok";
         }else{
-          return Promise.reject("error");
+          throw new Error("response NG");
         }
-        
-      }).catch(e => {
-        console.log(e); 
-        return Promise.reject("error");
-      });
-
+      } catch (error) {
+        console.log(error);
+        throw new Error("subscribe data error");
+         
+        //return "error";
+      }
   };
 
     const subscribe : (name:String) => void = async (name) => {

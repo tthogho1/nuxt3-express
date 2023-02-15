@@ -19,28 +19,23 @@ onMounted(() => {
     let sub =document.getElementById('subscribed');
     let unsub =document.getElementById('unsubscribed');  
     init(sub,unsub);
-    getUsers();
-
-   /* let video = document.getElementById('my-video') as HTMLVideoElement;
-    setlocalStream(localstream,video);
-    // let peerId = document.getElementById('my-peerId') as HTMLElement;
-    openPeerId();
-    let theirvideo = document.getElementById('their-video') as HTMLVideoElement;
-    answerPeerId(localstream,theirvideo); */
-    //alert(my_peerId);
+    getOtherUsers(tuser.user.name);
 
 });
 
 const wrapSubscribe = async() => {
   const tuser = getUser();
-  subscribeAsync(tuser.user.name).then((res) => {
-    console.log(res);
-    getUsers();
-  }).catch((err) => {
-    console.log(err);
-    alert("登録に失敗しました");
-  });
   
+  try {
+    const res = await subscribeAsync(tuser.user.name);
+    console.log(res);
+    getOtherUsers(tuser.user.name);
+    //getUsers();
+  } catch (error) {
+    console.log(error);
+    alert("登録に失敗しました");  
+  }
+
 };
 
 const wrapBroadcast = () => {
@@ -63,14 +58,21 @@ definePageMeta({
 
 const usersData = ref([]);
 
-const getUsers = async () => {
-  console.log("get Users");
+const getOtherUsers = async (name:string) => {
+  console.log("get other Users after login");
 
+  const params = new URLSearchParams();
+  params.append('name', name);
+  
   try {
-    const res = await fetch('/api/getUsers', {
+    const res = await fetch('/api/getAllOtherUsers', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: params
     });
+
     usersData.value = await res.json();
     console.log(usersData);
   } catch (error) {   
