@@ -6,12 +6,12 @@ import webpush, { SendResult } from 'web-push';
 
 export const post = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    console.log("POST");
+    console.log("create subscription");
     console.log(req.body);
     const subscription = req.body;
 
-//  const newSubscription = await subscriptionRepository.create(subscription);
-    const newSubscription = await subscriptionRepository.update(subscription);
+    const newSubscription = await subscriptionRepository.create(subscription);
+ //   const newSubscription = await subscriptionRepository.update(subscription);
     // Send 201 - resource created
     console.log(newSubscription);
     res.status(201).json(newSubscription);
@@ -29,7 +29,7 @@ export const remove = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    console.log("REMOVE");
+    console.log("REMOVE SUBSCRIPTION");
     const endpoint: string = req.query.endpoint?.toString();
     if (!endpoint) {
       res.sendStatus(400);

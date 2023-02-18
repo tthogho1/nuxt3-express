@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import * as subscriptionRepository from '../repositories/subscriptionRepository';
+import * as userRepository from '../repositories/userRepository';
 
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    console.log("LOGIN");
+    console.log("LOGIN USER " + req.body.name + " " + req.body.password + "");
     const name = req.body.name;
     const password = req.body.password;
 
-    const user = await subscriptionRepository.getUserByNameAndPassword(name,password);
+    const user = await userRepository.getUserByNameAndPassword(name,password);
 
     res.status(200).json(user);
   } catch (e) {

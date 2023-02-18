@@ -30,7 +30,7 @@ const setSubscribeMessage : () => void = async () =>  {
 };
 
 export function pushMsgButton() {
-    const init = (sub,unsub) => {
+    const init = (sub : Element ,unsub:Element) => {
         if ('serviceWorker' in navigator) {
            navigator.serviceWorker.register('/sw.js', {
             scope: '/',
