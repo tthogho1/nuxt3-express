@@ -16,7 +16,7 @@
         <div class="row align-items-center">
           <div class="col-md-4">パスワード</div>
           <div class="col-md-3">
-            <input v-model="password" type="text" placeholder="Password">
+            <input v-model="password" type="password" placeholder="Password">
           </div>
         </div>
         <div class="row align-items-center">

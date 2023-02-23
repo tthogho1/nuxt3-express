@@ -12,9 +12,12 @@
     "nuxt": "3.0.0-rc.8"
   },
   "dependencies": {
+    "@types/joi": "^17.2.3",
+    "@types/mongoose": "^5.11.97",
     "bootstrap": "^5.2.3",
     "express": "^4.18.1",
-    "mongoose": "^6.7.2",
+    "joi": "^17.8.3",
+    "mongoose": "^6.9.2",
     "skyway-js": "^4.4.5",
     "ts-node": "^10.9.1",
     "web-push": "^3.5.0",

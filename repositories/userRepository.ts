@@ -3,13 +3,15 @@ import mongoose, {LeanDocument, mongo} from "mongoose";
 
 
 export const createUser = async (i_user: IUser): Promise<LeanDocument<IUser>> => {
-  console.log("create user in repository");
+  console.log("create user to mongodb");
  
   try {
 
-  let savedUser = await new User(i_user).save();
+    let savedUser = await new User(i_user).save();
     return savedUser.toObject();
+  
   } catch (error) {
+
     console.log(error);
     throw new Error(error);
      error;
