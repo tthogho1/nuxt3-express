@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import * as userRepository from '../repositories/userRepository';
 import {validateUserSchema} from '../util/validator';
+import { logger } from '~~/util/logger';
 
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    console.log("LOGIN USER " + req.body.name + " " + req.body.password + "");
+    logger.info("LOGIN USER " + req.body.name + " " + req.body.password + "");
+    //console.log("LOGIN USER " + req.body.name + " " + req.body.password + "");
     const name = req.body.name;
     const password = req.body.password;
 
