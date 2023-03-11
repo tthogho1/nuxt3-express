@@ -47,7 +47,7 @@ const wrapSendmessage = (event) => {
   const tuser = getUser();
   const from = tuser.user.name;
 
-  const target = event.target.text;
+  const target = event.target.id;
   window.open("./skyway?from=" + from + "&target=" + target,"_blank");
 
 };
@@ -104,9 +104,14 @@ const sendmessage = async(event) => {
   </div>
 
   <div v-for="userdata in usersData" :key="userdata._id">
+    <div class="row"> 
+      <div class="col-12 fs-3">User List</div>
+    </div>
     <div class="row">
+      <div class="col-2 fs-4">{{userdata.name}}</div>
       <div class="col-1"></div>
-      <div class="col-11"><a href="#" @click="wrapSendmessage">{{userdata.name}}</a></div>
+      <button class="col-2 fs-5" :id="userdata.name"  @click="wrapSendmessage" >Call</button>
+      <div class="col-5"></div>
     </div>
   </div>
 </div>

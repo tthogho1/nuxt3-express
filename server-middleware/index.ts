@@ -1,6 +1,6 @@
 import express from "express";
 import { defaultRoute } from "../routes/defaultRoute";
-import { post, remove, broadcast ,sendmessage} from '../routes/subscription';
+import { post, remove, broadcast, sendmessage, declinecall} from '../routes/subscription';
 import { getUsers, getAllOtherUsers } from '../routes/dboperation';
 import { login } from '../routes/login';
 import { create } from '../routes/createUser';
@@ -23,6 +23,7 @@ app.post('/login', login);
 app.post('/getUsers', getUsers);
 app.post('/getAllOtherUsers', getAllOtherUsers)
 app.post('/sendmessage', sendmessage);
+app.post('/declineCall', declinecall);
 
 database();
 webpush();

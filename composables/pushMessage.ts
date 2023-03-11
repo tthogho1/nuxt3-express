@@ -167,54 +167,35 @@ export function pushMsgButton() {
       }else{
         alert("unsubscribe data failed");
       }
-    };
+    }
 
-    const sendmessage : (event,fromUser:string,peerId:string) => void 
-      = async (event,fromUser:string,peerId:string) => {
-      console.log(event);
-
-      const name = event.target.text;
-      let result = window.confirm("send message to " + name + " ?");
+    
+    const sendmessage : (fromUser:string,target:string,peerId:string) => void 
+      = async (fromUser:string,target:string,peerId:string) => {
+      let result = window.confirm("send message to " +  target + " ?");
       if(!result){
         return;
       }
 
       const data = {
-        target:name,
+        target:target,
         fromUser:fromUser,
         peerId:peerId,
       }
-      await fetch('/api/sendmessage', {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: {
-            'content-type': 'application/json',
-          },
-        });
-      //alert("broadcast");
-    };
 
-    const sendTest : (fromUser:string,target:string,peerId:string) => void 
-    = async (fromUser:string,target:string,peerId:string) => {
-
-    let result = window.confirm("send message to " +  target + " ?");
-    if(!result){
-      return;
-    }
-
-    const data = {
-      target:target,
-      fromUser:fromUser,
-      peerId:peerId,
-    }
-    await fetch('/api/sendmessage', {
+      fetch('/api/sendmessage', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
           'content-type': 'application/json',
         },
+      }).then(response => {
+        if (!response.ok) {
+          throw new Error("error : " + response.statusText);
+        }
+      }).catch(error => {
+        alert("sendmessage error" + error);
       });
-    //alert("broadcast");
   };
 
     return {
@@ -223,7 +204,6 @@ export function pushMsgButton() {
       subscribe,
       unsubscribe,
       sendmessage,
-      sendTest,
       subscribeAsync,
     };
   }

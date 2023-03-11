@@ -1,11 +1,13 @@
 let peerId = null;
-
+let savedata = null;
 //
 // push通知を受け取った時の処理
 //
 self.addEventListener('push', (e) => {
   const data = e.data.json();
   const title = data.title;
+
+  savedata = data;
 
   if (title=='$CALL$'){
     peerId = data.peerId;
@@ -31,7 +33,6 @@ self.addEventListener('push', (e) => {
 // ボタンを押した時の処理
 //
 self.addEventListener('notificationclick', (e) => {
-  const data = e.notification.data;
   const action = e.action;
   e.notification.close();
 
@@ -41,10 +42,30 @@ self.addEventListener('notificationclick', (e) => {
     // do something
     clients.openWindow('./skyway?calltarget=' + peerId).then(
       (windowClient) => console.log("windowClient: " + windowClient));
-     // window.open("http://localhost:8080/" + ,"_blank");
-  } else if (action === 'decline') {
+
+    } else if (action === 'decline') {
+
     console.log('decline');
-    // do something
+    
+    const declinedata = {
+      target:savedata.fromUser,
+      fromUser:savedata.target,
+    }
+
+    fetch('/api/declineCall', {
+      method: 'POST',
+      body: JSON.stringify(declinedata),
+      headers: {
+        'content-type': 'application/json',
+      },
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error("error : " + response.statusText);
+      }
+    }).catch(error => {
+      alert("declineCall error" + error);
+    });
+    
   }
 });
 

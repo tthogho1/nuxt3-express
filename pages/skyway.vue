@@ -104,7 +104,7 @@ video {
 import Peer from 'skyway-js';
 import { pushMsgButton } from "~~/composables/pushMessage";
 
-const {  sendTest } = pushMsgButton();
+const {  sendmessage } = pushMsgButton();
 
 
 //const Peer = window.Peer;
@@ -179,7 +179,7 @@ const {  sendTest } = pushMsgButton();
       const from = urlParams.get('from');
       if (from){
         const target = urlParams.get('target');
-        sendTest(from,target,id);
+        sendmessage(from,target,id);
       }else{
         if (calltarget){
           remoteId.value = calltarget;
