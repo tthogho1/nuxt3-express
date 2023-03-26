@@ -6,7 +6,7 @@ import { setlocalStream ,  skyWayInformation} from '../composables/skyway'
 const {openPeerId , getPeerId, answerPeerId} = skyWayInformation();
 const {user,setUser,getUser} = userInformation();
 const { init, broadcast, subscribe ,subscribeAsync, unsubscribe , sendmessage } = pushMsgButton();
-// const {data: articles, refresh} = await useFetch('/api/blogs');
+
 let localstream : MediaStream ;
 
 onMounted(() => {
@@ -30,10 +30,10 @@ const wrapSubscribe = async() => {
     const res = await subscribeAsync(tuser.user.name);
     console.log(res);
     getOtherUsers(tuser.user.name);
-    //getUsers();
+    alert("subscribe success");    
   } catch (error) {
     console.log(error);
-    alert("登録に失敗しました");  
+    alert("subscribe failed");  
   }
 
 };
@@ -51,6 +51,11 @@ const wrapSendmessage = (event) => {
   window.open("./skyway?from=" + from + "&target=" + target,"_blank");
 
 };
+
+const wrapUnsubscribe = ()=>{
+  const tuser = getUser();
+  unsubscribe(tuser.user.name);
+}
 
 definePageMeta({
   pageTransition: false,
@@ -100,7 +105,7 @@ const sendmessage = async(event) => {
   <div class="row">
     <button class="col-4" @click="wrapBroadcast()">Send push notification</button>
     <button class="col-4" @click="wrapSubscribe()">Subscribe</button>
-    <button class="col-4" @click="unsubscribe()">Unsubscribe</button>
+    <button class="col-4" @click="wrapUnsubscribe()">Unsubscribe</button>
   </div>
 
   <div v-for="userdata in usersData" :key="userdata._id">

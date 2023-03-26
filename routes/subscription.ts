@@ -3,7 +3,7 @@ import * as subscriptionRepository from '../repositories/subscriptionRepository'
 import webpush, { SendResult } from 'web-push';
 import { logger } from '~~/util/logger';
 
-export const post = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const subscription = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     logger.info("create subscription");
 
@@ -20,20 +20,21 @@ export const post = async (req: Request, res: Response, next: NextFunction): Pro
   }
 };
 
-export const remove = async (
+export const removeSubscription = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
     logger.info("REMOVE SUBSCRIPTION");
-    const endpoint: string = req.query.endpoint?.toString();
-    if (!endpoint) {
+    const username: string = req.query.username?.toString();
+    if (!username) {
+      logger.error("username is not provided");
       res.sendStatus(400);
       return;
     }
 
-    const successful = await subscriptionRepository.deleteByEndpoint(endpoint);
+    const successful = await subscriptionRepository.deleteByUserName(username);
     if (successful) {
       res.sendStatus(200);
     } else {

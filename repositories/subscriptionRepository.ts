@@ -42,6 +42,11 @@ export const deleteByEndpoint = async (endpoint: string): Promise<boolean> => {
   return result.deletedCount > 0;
 };
 
+export const deleteByUserName = async (name: string): Promise<boolean> => {
+  const result = await Subscription.remove({ name });
+  return result.deletedCount > 0;
+};
+
 export const getAll = async (): Promise<ISubscription[]> => {
   return Subscription.find();
 };

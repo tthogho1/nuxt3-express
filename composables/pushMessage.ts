@@ -103,8 +103,6 @@ export function pushMsgButton() {
       } catch (error) {
         console.log(error);
         throw new Error("subscribe data error");
-         
-        //return "error";
       }
   };
 
@@ -147,13 +145,13 @@ export function pushMsgButton() {
         }
     };
 
-    const unsubscribe :() => void  = async () => {
+    const unsubscribe :(username:string) => void  = async (username) => {
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.getSubscription();
       if (!subscription) return;
     
       const { endpoint } = subscription;
-      const response = await fetch(`/api/subscription?endpoint=${endpoint}`, {
+      const response = await fetch(`/api/subscription?username=${username}`, {
         method: 'DELETE',
         headers: {
           'content-type': 'application/json',
